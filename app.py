@@ -7,6 +7,17 @@ app = Flask(__name__)
 def routeIndex():
     return render_template('index.html')
 
+@app.route('/auth/<route>')
+def routeAuth(route=None):
+    if route == 'login': pass
+    elif route == 'logout': pass
+
+@app.route('/mod/r')
+@app.route('/mod/r/<rid>')
+def routeMod(rid=None):
+    if not rid:
+        return render_template('mod.html', reqs=Request.objects())
+
 @app.route('/find')
 def routeSearch():
     return render_template('find.html', reqs=Request.objects())
