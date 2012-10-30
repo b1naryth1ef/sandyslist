@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, flash, render_template, request, redirect, url_for, session
 from datetime import datetime
 from data import Request, FollowUp
 
@@ -44,21 +44,31 @@ def routeMod(id=None, action=None):
     if not id: return render_template('find.html', reqs=Request.objects(), ismod=True)
     if action == 'valid_resp':
         q = FollowUp.objects(id=id)
-        if not len(q): return "Invalid response ID!"
+        if not len(q): 
+            flash("Invalid response ID!", 'error')
+            return redirect('/responses')
         q = q[0]
         q.valid = True
         q.save()
-        return 'Marked response as valid! <a href="/responses">Back to list</a>'
+        flash('Marked response as valid!', 'error')
+        return redirect('/responses')
+
     elif action == 'delete_resp':
         q = FollowUp.objects(id=id)
-        if not len(q): return "Invalid response ID!"
+        if not len(q): 
+            flash("Invalid response ID!", 'error')
+            return redirect('/responses')
         q[0].delete()
-        return 'Deleted response! <a href="/responses">Back to list</a>'
+        flash('Deleted response!', 'success')
+        return redirect('/responses')
     elif action == 'delete_req':
         q = Request.objects(id=id)
-        if not len(q): return "Invalid request ID!"
+        if not len(q):
+            flash("Invalid response ID!", 'error')
+            return redirect('/responses')
         q[0].delete()
-        return 'Marked request as invalid! <a href="/find">Back to list</a>'
+        flash('Marked request as invalid!', 'success')
+        return redirect('/responses')
 
 @app.route('/help/<id>')
 def routeHelp(id):
