@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, redirect
-from data import Market
-
-#@TODO Captcha
-
+from datetime import datetime
+from data import Request
 app = Flask(__name__)
 
 @app.route('/')
@@ -11,7 +9,7 @@ def routeIndex():
 
 @app.route('/find')
 def routeSearch():
-    return render_tempalte('find.html')
+    return render_template('find.html', reqs=Request.objects())
 
 @app.route('/post')
 def routePost():
@@ -19,8 +17,17 @@ def routePost():
 
 @app.route('/internals/<route>', methods=['POST'])
 def internals(route=None):
-    if route == 'needhelp': pass
-    return "Your request has been sent and will be processed ASAP!" #@TODO give a request ID for tracking
+    if route == 'needhelp':
+        for k, v in request.form.items():
+            if not v: return 'You must give a value for %s! <a href="/post">Try again</a>' % k 
+        obj = Request(
+            name=request.form.get('name'),
+            urgent={'on':True, 'off':False, None:False}[request.form.get('urgent')],
+            request=request.form.get('request'),
+            contact=request.form.get('phonenum'),
+            location=request.form.get('location'))
+        obj.save()
+        return "Your request has been submitted to the system! We'll try to get to it ASAP. Request ID: %s" % obj.id 
 
 
 if __name__ == "__main__":

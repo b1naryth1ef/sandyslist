@@ -1,12 +1,12 @@
 from mongoengine import *
+from datetime import datetime
 
 connect('sandy', host='hydr0.com', port=27017)
 
-class Market(Document):
+class Request(Document):
     name = StringField()
-    people = IntField()
-    animals = BooleanField()
-    pos = GeoPointField()
-    phone = StringField()
-    email = StringField()
-    twitter = StringField()
+    request = StringField()
+    location = StringField()
+    contact = StringField()
+    urgent = BooleanField()
+    time = DateTimeField(default=datetime.now)
