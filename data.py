@@ -10,3 +10,14 @@ class Request(Document):
     contact = StringField()
     urgent = BooleanField()
     time = DateTimeField(default=datetime.now)
+    responses = ListField(ReferenceField('FollowUp'))
+    valid = BooleanField(default=True)
+
+class FollowUp(Document):
+    name = StringField()
+    cangive = StringField()
+    contact = StringField()
+    time = DateTimeField(default=datetime.now)
+    entry = ReferenceField(Request)
+    valid = BooleanField(default=False)
+    connected = BooleanField(default=False)

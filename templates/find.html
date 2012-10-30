@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Index{% endblock %}
+{% block title %}Find requests{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -7,26 +7,26 @@
         <h2>If you find someone requring something you have in your area, click the "Provide Help" link to get in touch with them!</h2>
     </div>
 </div>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Request</th>
-            <th>Location</th>
-              <th>Provide Help</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in reqs %}
-          <tr>
-            <td>{{ i.name }}</td>
-          <td>{{ i.request }}</td>
-          <td>{{ i.location }}</td>
-                    <td><a class="btn btn-success"  href="/help/{{ i.id }}">Help this person &raquo;</a></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Request</th>
+      <th>Location</th>
+      <th>Provide Help</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in reqs %}
+    <tr>
+      <td>{{ i.name }}</td>
+      <td>{{ i.request }}</td>
+      <td>{{ i.location }}</td>
+      <td><a class="btn btn-success"  href="/help/{{ i.id }}">Help this person &raquo;</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
 
       <hr>
 {% endblock %}
