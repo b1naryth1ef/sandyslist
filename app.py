@@ -125,4 +125,4 @@ def internals(route=None):
         We'll update the page as soon as you can help!""" % (obj.id)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
