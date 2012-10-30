@@ -3,7 +3,6 @@ from datetime import datetime
 from mongoenginepagination import Document
 import os
 
-print os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017')
 connect('heroku_app8846523', host=os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017'))
 
 class Request(Document):
