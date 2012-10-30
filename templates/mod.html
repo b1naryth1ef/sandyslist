@@ -2,14 +2,24 @@
 {% block title %}Find requests{% endblock %}
 
 {% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div id="alert_block">
+    {% for category, message in messages %}
+      <p class='alert alert-{{ category }}'>{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
 <table class="table table-hover">
   <thead>
     <tr>
       <th>Name</th>
       <th>Can give</th>
       <th>Contact</th>
-      <th>Mark Valid</th>
-      <th>Mark Invalid</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -18,8 +28,12 @@
       <td>{{ i.name }}</td>
       <td>{{ i.cangive }}</td>
       <td>{{ i.contact }}</td>
-      <td><a class="btn btn-warning"  href="/mod/valid_resp/{{ i.id }}">Mark as valid</a></td>
-      <td><a class="btn btn-danger" href="/mod/delete_resp/{{ i.id }}">Mark as invalid (delete)</a></td>
+      <td>
+          <a class="btn btn-danger" href="/mod/delete_resp/{{ i.id }}">Delete</a>
+          {% if i.valid %}
+            <a class="btn btn-warning"  href="/mod/valid_resp/{{ i.id }}">Mark as Valid</a>
+          {% endif %}
+      </td>
     </tr>
   {% endfor %}
   </tbody>
