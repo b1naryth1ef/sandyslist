@@ -1,8 +1,9 @@
 from mongoengine import *
 from datetime import datetime
 from mongoenginepagination import Document
+import os
 
-connect('sandy', host='hydr0.com', port=27017)
+connect(host=os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017'))
 
 class Request(Document):
     name = StringField()
