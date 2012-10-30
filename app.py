@@ -17,6 +17,7 @@ def routeLogin():
 @app.route('/logout')
 def routeLogout():
     session['logged'] = False
+    return redirect('/')
 
 @app.route('/')
 def routeIndex(): return render_template('index.html')
