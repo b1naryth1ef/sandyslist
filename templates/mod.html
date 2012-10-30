@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Find requests{% endblock %}
+
+{% block content %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Can give</th>
+      <th>Contact</th>
+      <th>Mark Valid</th>
+      <th>Mark Invalid</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in reqs.items %}
+    <tr>
+      <td>{{ i.name }}</td>
+      <td>{{ i.cangive }}</td>
+      <td>{{ i.contact }}</td>
+      <td><a class="btn btn-warning"  href="/mod/valid_resp/{{ i.id }}">Mark as valid</a></td>
+      <td><a class="btn btn-danger" href="/mod/delete_resp/{{ i.id }}">Mark as invalid (delete)</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<a class="btn btn-success"  href="/responses/{{ page+1 }}">Next Page &raquo;</a>
+{% if page != 1 %}
+<a class="btn btn-success"  href="/responses/{{ page-1 }}">&laquo; Previous Page</a>
+{% endif %}
+      <hr>
+{% endblock %}
+{% block footer %}{% endblock %}

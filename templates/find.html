@@ -13,20 +13,28 @@
       <th>Name</th>
       <th>Request</th>
       <th>Location</th>
-      <th>Provide Help</th>
+      <th>{% if ismod %}Delete{% else %}Provide Help{% endif %}</th>
     </tr>
   </thead>
   <tbody>
-    {% for i in reqs %}
+    {% for i in reqs.items %}
     <tr>
       <td>{{ i.name }}</td>
       <td>{{ i.request }}</td>
       <td>{{ i.location }}</td>
-      <td><a class="btn btn-success"  href="/help/{{ i.id }}">Help this person &raquo;</a></td>
+      {% if ismod %}
+        <td><a class="btn btn-danger" href="/mod/delete_req/{{ i.id }}">Mark as invalid (delete)</a></td>
+      {% else %}
+        <td><a class="btn btn-success"  href="/help/{{ i.id }}">Help this person &raquo;</a></td>
+      {% endif %}
     </tr>
   {% endfor %}
   </tbody>
 </table>
+<a class="btn btn-success"  href="/find/{{ reqs.page+1 }}">Next Page &raquo;</a>
+{% if page != 1 %}
+<a class="btn btn-success"  href="/find/{{ reqs.page-1 }}">&laquo; Previous Page</a>
+{% endif %}
 
       <hr>
 {% endblock %}
