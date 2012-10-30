@@ -4,7 +4,12 @@
 {% block content %}
 <div class="row">
     <div class="span12" style="text-align: center;">
-        <h2>If you find someone requring something you have in your area, click the "Provide Help" link to get in touch with them!</h2>
+        <h2>If you find someone requring something you have in your area, click the "Provide Help" link to get in touch with them!</h2
+        >
+        <br />
+          <p class="text-success">Green indicates a request that has had response (but may NOT be solved yet)</p>
+          <p class="text-error">Red indicates a request that has been marked as urgent by the poster</p>
+          <p class="text-warning">Orange indicates a request that has not yet been responded too, and is not urgent</p>
     </div>
 </div>
 <table class="table table-hover">
@@ -18,7 +23,7 @@
   </thead>
   <tbody>
     {% for i in reqs.items %}
-    <tr>
+    <tr {% if i.connected %} class="success"{% elif i.urgent %} class="error" {% else %} class="warning" {% endif %}>
       <td>{{ i.name }}</td>
       <td>{{ i.request }}</td>
       <td>{{ i.location }}</td>
