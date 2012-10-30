@@ -17,9 +17,11 @@ def routePost():
 
 @app.route('/internals/<route>', methods=['POST'])
 def internals(route=None):
+    print request.form
     if route == 'needhelp':
         for k, v in request.form.items():
-            if not v: return 'You must give a value for %s! <a href="/post">Try again</a>' % k 
+            if not v: 
+                return 'You must give a value for %s! <a href="/post">Try again</a>' % k 
         obj = Request(
             name=request.form.get('name'),
             urgent={'on':True, 'off':False, None:False}[request.form.get('urgent')],
