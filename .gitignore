@@ -1,4 +1,10 @@
 *~
 *#
 .DS_Store
-.pyc
+*.pyc
+*.pyo
+*.swp
+*.coverage
+*.pydevproject
+*.project
+.Python
