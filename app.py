@@ -14,6 +14,10 @@ def routeLogin():
     session['logged'] = True
     return redirect('/responses')
 
+@app.route('/logout')
+def routeLogout():
+    session['logged'] = False
+
 @app.route('/')
 def routeIndex(): return render_template('index.html')
 
@@ -23,13 +27,13 @@ def routePost(): return render_template('post.html')
 @app.route('/find') #@TODO Pagination (sort invalid)
 @app.route('/find/<page>')
 def routeSearch(page=1):
-    reqs = Request.objects(valid=True).paginate(page=int(page), per_page=35)
+    reqs = Request.objects().paginate(page=int(page), per_page=35)
     return render_template('find.html', reqs=reqs, ismod=isMod(), page=int(page))
 
 @app.route('/responses')
 @app.route('/responses/<page>')
 def routeResponese(page=1):
-    reqs = FollowUp.objects(valid=False).paginate(page=int(page), per_page=35)
+    reqs = FollowUp.objects().paginate(page=int(page), per_page=35)
     return render_template('mod.html', reqs=reqs, page=int(page))
 
 # -- Dynamic Stuffs --
@@ -40,19 +44,19 @@ def routeMod(id=None, action=None):
     if action == 'valid_resp':
         q = FollowUp.objects(id=id)
         if not len(q): return "Invalid response ID!"
-        q[0].valid = True
-        q[0].save()
+        q = q[0]
+        q.valid = True
+        q.save()
         return 'Marked response as valid! <a href="/responses">Back to list</a>'
     elif action == 'delete_resp':
         q = FollowUp.objects(id=id)
         if not len(q): return "Invalid response ID!"
         q[0].delete()
         return 'Deleted response! <a href="/responses">Back to list</a>'
-    elif aciton == 'delete_req':
+    elif action == 'delete_req':
         q = Request.objects(id=id)
         if not len(q): return "Invalid request ID!"
-        q[0].valid = False
-        q[0].save()
+        q[0].delete()
         return 'Marked request as invalid! <a href="/find">Back to list</a>'
 
 @app.route('/help/<id>')
@@ -73,7 +77,7 @@ def routeResp(id):
         return "No such response ID '%s'" % id
     if p[0].valid:
         return """Your help is needed! Please click <a href='/resp/%s/info'>here</a> to get contact information! 
-        Make sure to follow up on this page to help us keep efforts organized and managed!""" % (p.id)
+        Make sure to follow up on this page to help us keep efforts organized and managed!""" % (p[0].id)
     else:
         return "Your post is still waiting moderation!" #@TODO Refresh page every x mins?
 
@@ -85,12 +89,12 @@ def routeRespInfo(id):
     if not len(p): return "No such response ID '%s'" % id
     if not p[0].valid:
         return redirect(url_for('/resp/%s' % id))
-    p[0].connected = True
-    p[0].entry.connected = True
-    p[0].entry.save()
-    p[0].save()
-    return "Please contact the person with this information: %s" % p[0].entry.contact
-
+    p = p[0]
+    p.connected = True
+    p.entry.connected = True
+    p.entry.save()
+    p.save()
+    return "Please contact the person with this information: %s" % p.entry.contact #@TODO More info here?
 
 @app.route('/internals/<route>', methods=['POST'])
 def internals(route=None):
