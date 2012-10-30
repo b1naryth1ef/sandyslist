@@ -2,15 +2,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {%block head %}
-
+    {% block head %}
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>SandysList -- {% block title %}Home{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <!-- Le styles -->
     <link href="../static/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -25,13 +22,6 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <!-- Fav and touch icons -->
-    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
   </head>
 
   <body>
@@ -50,44 +40,23 @@
               <li><a href="/">Home</a></li>
               <li><a href="/find">Find</a></li>
               <li><a href="/post">Post</a></li>
-              <!--<li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">About</a></li>
-                  <li><a href="#">Who are we</a></li>
-                  <li class="divider"></li>
-                  <li class="nav-header">Contact</li>
-                  <li><a href="#">Twitter</a></li>
-                  <li><a href="#">IRC</a></li>
-                </ul>
-              </li> -->
             </ul>
-            <!--<form class="navbar-form pull-right">
-              <input class="span2" type="text" placeholder="Email">
-              <input class="span2" type="password" placeholder="Password">
-              <button type="submit" class="btn">Sign in</button>
-            </form>
-          </div>--><!--/.nav-collapse -->
         </div>
       </div>
     </div>
-
-
 
     <div class="container">
     {% block content %}
     {% endblock %}
     </div> <!-- /container -->
-
-
-      <footer>
-    {% block footer %}
-    {% endblock %}
+    <footer class="footer">
+      <div class="container">
+        <p>Coded by <a href="http://twitter.com/b1naryth1ef">@B1naryth1ef</a>, designed by <a href="https://github.com/wavesounds">WaveSounds</a> using <a href="http://http://twitter.github.com/bootstrap/">Bootstrap</a></p>
+  
+        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      </div>
     </footer>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
     <script src="../assets/js/bootstrap-alert.js"></script>
