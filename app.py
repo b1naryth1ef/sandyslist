@@ -28,13 +28,15 @@ def routePost(): return render_template('post.html')
 @app.route('/find') #@TODO Pagination (sort invalid)
 @app.route('/find/<page>')
 def routeSearch(page=1):
-    reqs = Request.objects().paginate(page=int(page), per_page=35)
+    try: reqs = Request.objects().paginate(page=int(page), per_page=35) #@NOTE Hacky af
+    except: return redirect('/find/%s' % (int(page)-1))
     return render_template('find.html', reqs=reqs, ismod=isMod(), page=int(page))
 
 @app.route('/responses')
 @app.route('/responses/<page>')
 def routeResponese(page=1):
-    reqs = FollowUp.objects().paginate(page=int(page), per_page=35)
+    try: reqs = FollowUp.objects().paginate(page=int(page), per_page=35)
+    except: return redirect('/responses/%s' % (int(page)-1))
     return render_template('mod.html', reqs=reqs, page=int(page))
 
 # -- Dynamic Stuffs --
