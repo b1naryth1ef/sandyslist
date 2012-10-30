@@ -7,7 +7,7 @@
   {% if messages %}
   <div id="alert_block">
     {% for category, message in messages %}
-      <p class='alert alert-{{ category }}'>{{ message }}</p>
+      <p class='alert alert-{{ category }}'>{{ message|safe }}</p>
     {% endfor %}
   </div>
   {% endif %}
