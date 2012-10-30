@@ -1,0 +1,3 @@
+Flask==0.9
+mongoengine==0.7.5
+git+git://github.com/mechanicalchopsticks/MongoEngine-Pagination
