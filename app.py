@@ -1,11 +1,12 @@
 from flask import Flask, flash, render_template, request, redirect, url_for, session
 from datetime import datetime
 from data import Request, FollowUp
-import os
+import os, requests
 
 app = Flask(__name__)
 app.secret_key = "asdfalsdkfg38asdfl38as8dfa8"
 pword = os.getenv('SANDYLOGIN', 'test')
+captcha_priv = os.getenv('CAPTCHAPRIV', None)
 
 def isMod():
     return session.get('loggedin', False)
@@ -122,9 +123,24 @@ def routeRespInfo(id):
     flash("Please contact the person with this information: %s" % p.entry.contact, 'success') #@TODO More info here?
     return render('base.html')
 
+def checkCaptcha():
+    if not captcha_priv: return True
+    k = {
+        'privatekey':captcha_priv,
+        'remoteip':request.remote_addr,
+        'challenge':request.form.get('recaptcha_challenge_field'),
+        'response':request.form.get('recaptcha_response_field')
+    }
+    r = requests.get('http://www.google.com/recaptcha/api/verify', params=k)
+    print r.text
+    return r.text.startswith('true')
+
 @app.route('/internals/<route>', methods=['POST'])
 def internals(route=None):
     if route == 'needhelp':
+        if not checkCaptcha():
+            flash('The captcha was incorrect!', 'error')
+            return redirect('/post')
         for k, v in request.form.items():
             if not v: 
                 flash('No fields can be empty!', 'error')
