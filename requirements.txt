@@ -7,4 +7,5 @@ distribute==0.6.28
 gunicorn==0.15.0
 mongoengine==0.7.5
 pymongo==2.3
+requests==0.14.2
 wsgiref==0.1.2
