@@ -7,7 +7,6 @@ if os.getenv('USE_MLAB'):
     connect('heroku_app8846523', host=os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017'))
 else:
     connect('sandy', host='hydr0.com') #Dev server
-print 'Done connecting!'
 
 class Request(Document):
     name = StringField()

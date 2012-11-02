@@ -11,7 +11,6 @@ def isMod():
     return session.get('loggedin', False)
 
 def render(*args, **kwargs):
-    print 'RENDERING...'
     kwargs['ismod'] = isMod()
     return render_template(*args, **kwargs)
 
