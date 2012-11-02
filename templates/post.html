@@ -2,45 +2,37 @@
 {% block title %}Make a request{% endblock %}
 
 {% block content %}
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-  <div id="alert_block">
-    {% for category, message in messages %}
-      <p class='alert alert-{{ category }}'>{{ message|safe }}</p>
-    {% endfor %}
-  </div>
-  {% endif %}
-{% endwith %}
-
-<h3>Make a Request</h3>
 <div class="container">
   <div class="row">
-<div class="span4">
-  <form class="form-horizontal" name="needhelp" action="/internals/needhelp" method="post">
-    <div class="control-group">
-      <label for="name">Name:</label>
-      <input type="text" name="name" id="name" value="" />
+    <!-- <div class="span12" style="text-align: center"> -->
+    <div class="span4">
+     <h3 class="offset1 span4">Make a Request</h3>
+      <form class="form-horizontal" name="needhelp" action="/internals/needhelp" method="post">
+        <div class="control-group">
+
+          <label class="control-label" for="name">Name:</label>
+          <div class="controls"><input type="text" name="name" id="name" value="" /></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="request">I need:</label><br />
+          <div class="controls"><textarea cols="40" rows="5" name="request"></textarea></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="location">Location ("City, State" or "Zipcode"):</label>
+          <div class="controls"><input type="text" name="location" id="location" value="" /></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="phonenum">Phone Number (we will <em>not</em> disclose this):</label>
+          <div class="controls"><input type="tel" name="phonenum" id="phonenum" value="" /></div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" class="checkbox">Is the request urgent?</label>
+            <div class="controls"><input type="checkbox" name="urgent" /> 
+            <input type="submit" style="btn btn-primary btn-large; float: right" value="Submit"/>  </div>
+        </div>
+      </form>
     </div>
-    <div class="control-group">
-      <label for="request">I need:</label><br />
-      <textarea cols="40" rows="5" name="request"></textarea>
-    </div>
-    <div class="control-group">
-      <label for="location">Location ("City, State" or "Zipcode"):</label><br /><input type="text" name="location" id="location" value="" />
-    </div>
-    <div class="control-group">
-      <label for="phonenum">Phone Number (or other viable contact):</label><br /><input type="tel" name="phonenum" id="phonenum" value="" />
-    </div>
-    <div class="control-group">
-        <label class="checkbox">
-        <input type="checkbox" name="urgent" /> Is the request urgent?
-        </label>
-        <input type="submit" style="btn btn-primary btn-large" value="Submit" />  
-    </div>
-  </form>
-</div>
-</div>
+  </div>
 </div>
 
 

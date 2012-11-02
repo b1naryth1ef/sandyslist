@@ -13,15 +13,6 @@
     </div>
 </div>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-  <div id="alert_block">
-    {% for category, message in messages %}
-      <p class='alert alert-{{ category }}'>{{ message|safe }}</p>
-    {% endfor %}
-  </div>
-  {% endif %}
-{% endwith %}
 
 <table class="table table-hover">
   <thead>

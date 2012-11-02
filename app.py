@@ -1,49 +1,58 @@
 from flask import Flask, flash, render_template, request, redirect, url_for, session
 from datetime import datetime
 from data import Request, FollowUp
+import os
 
 app = Flask(__name__)
 app.secret_key = "asdfalsdkfg38asdfl38as8dfa8"
 
+
 def isMod():
-    return session.get('logged', False)
+    return session.get('loggedin', False)
+
+def render(*args, **kwargs):
+    kwargs['ismod'] = isMod()
+    return render_template(*args, **kwargs)
 
 #-- Static Routes --
-@app.route('/secret_login') #LOL SECURTUY IS GUD
-def routeLogin():
-    session['logged'] = True
-    return redirect('/responses')
+@app.route('/login/<pw>') #LOL SECURTUY IS GUD
+def routeLogin(pw=None):
+    if pw == os.getenv('SANDYLOGIN', 'test'):
+        session['loggedin'] = True
+        return redirect('/responses')
+    flash('Bad password!')
+    return redirect('/')
 
 @app.route('/logout')
 def routeLogout():
-    session['logged'] = False
+    session['loggedin'] = False
     return redirect('/')
 
 @app.route('/')
-def routeIndex(): return render_template('index.html')
+def routeIndex(): return render('index.html')
 
 @app.route('/post')
-def routePost(): return render_template('post.html')
+def routePost(): return render('post.html')
 
 @app.route('/find') #@TODO Pagination (sort invalid)
 @app.route('/find/<page>')
 def routeSearch(page=1):
     try: reqs = Request.objects().paginate(page=int(page), per_page=35) #@NOTE Hacky af
     except: return redirect('/find/%s' % (int(page)-1))
-    return render_template('find.html', reqs=reqs, ismod=isMod(), page=int(page))
+    return render('find.html', reqs=reqs, page=int(page))
 
 @app.route('/responses')
 @app.route('/responses/<page>')
 def routeResponese(page=1):
     try: reqs = FollowUp.objects().paginate(page=int(page), per_page=35)
     except: return redirect('/responses/%s' % (int(page)-1))
-    return render_template('mod.html', reqs=reqs, page=int(page))
+    return render('mod.html', reqs=reqs, page=int(page))
 
 # -- Dynamic Stuffs --
 @app.route('/mod/<action>/<id>')
 def routeMod(id=None, action=None):
     if not isMod(): return redirect(url_for('/find'))
-    if not id: return render_template('find.html', reqs=Request.objects(), ismod=True)
+    if not id: return render('find.html', reqs=Request.objects())
     if action == 'valid_resp':
         q = FollowUp.objects(id=id)
         if not len(q): 
@@ -52,7 +61,7 @@ def routeMod(id=None, action=None):
         q = q[0]
         q.valid = True
         q.save()
-        flash('Marked response as valid!', 'error')
+        flash('Marked response as valid!', 'success')
         return redirect('/responses')
 
     elif action == 'delete_resp':
@@ -79,7 +88,7 @@ def routeHelp(id):
     p = Request.objects(id=id)
     if not len(p):
         return "No such request ID '%s'" % id
-    return render_template('help.html', p=p[0])
+    return render('help.html', p=p[0])
 
 @app.route('/resp/<id>')
 def routeResp(id):
@@ -89,10 +98,12 @@ def routeResp(id):
     if not len(p):
         return "No such response ID '%s'" % id
     if p[0].valid:
-        return """Your help is needed! Please click <a href='/resp/%s/info'>here</a> to get contact information! 
-        Make sure to follow up on this page to help us keep efforts organized and managed!""" % (p[0].id)
+        flash("""Your help is needed! Please click <a href='/resp/%s/info'>here</a> to get contact information! 
+        Make sure to follow up on this page to help us keep efforts organized and managed!""" % (p[0].id), 'success')
+        return render('base.html')
     else:
-        return "Your post is still waiting moderation!" #@TODO Refresh page every x mins?
+        flash("Your post is still waiting moderation!", 'error')
+        return render('base.html', autoref=True)
 
 @app.route('/resp/<id>/info')
 def routeRespInfo(id):
@@ -108,14 +119,15 @@ def routeRespInfo(id):
     p.entry.connected = True
     p.entry.save()
     p.save()
-    return "Please contact the person with this information: %s" % p.entry.contact #@TODO More info here?
+    flash("Please contact the person with this information: %s" % p.entry.contact, 'success') #@TODO More info here?
+    return render('base.html')
 
 @app.route('/internals/<route>', methods=['POST'])
 def internals(route=None):
     if route == 'needhelp':
         for k, v in request.form.items():
             if not v: 
-                flash('You must give a value for %s! <a href="/post">Try again</a>' % k , 'error')
+                flash('No fields can be empty!', 'error')
                 return redirect('/post')
         obj = Request(
             name=request.form.get('name'),

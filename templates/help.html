@@ -2,35 +2,36 @@
 {% block title %}Help Someone{% endblock %}
 
 {% block content %}
-<h3>Help someone!</h3>
-<p>
-  Your offering to help:<b> {{ p.name }}</b> <br />
-  Who needs:<b> {{ p.request }}</b><br />
-  Nearby:<b> {{ p.location }}</b> <br />
-  If your request is valid, we'll forward contact details to you
-</p>
 <div class="container">
   <div class="row">
-<div class="span4">
-  <form class="form-horizontal" name="canhelp" action="/internals/canhelp" method="post">
-    <input type="hidden" name="id" value="{{ p.id }}">
-    <div class="control-group">
-      <label for="name">Name:</label>
-      <input type="text" name="name" id="name" value="" />
+    <div class="span4">
+        <div class="span4">
+          <h3>Help Someone</h3>
+          <p>
+            Your offering to help:<b> {{ p.name }}</b> <br />
+            Who needs:<b> {{ p.request }}</b><br />
+            Nearby:<b> {{ p.location }}</b> <br />
+            If your request is valid, we'll forward contact details to you
+          </p>
+        </div>
+        <form class="form-horizontal" name="canhelp" action="/internals/canhelp" method="post">
+          <input type="hidden" name="id" value="{{ p.id }}">
+          <div class="control-group">
+            <label class="control-label" for="name">Name:</label>
+            <div class="controls"><input type="text" name="name" id="name" value="" /></div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="have">I have:</label><br />
+            <div class="controls"><textarea cols="40" rows="5" name="have"></textarea></div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="phonenum">Phone Number (or other viable contact):</label>
+            <div class="controls"><input type="tel" name="phonenum" id="phonenum" value="" />
+            <input type="submit" style="btn btn-primary btn-large; float: right" value="Submit"/>  </div>
+          </div>
+        </form>
     </div>
-    <div class="control-group">
-      <label for="have">I have:</label><br />
-      <textarea cols="40" rows="5" name="have"></textarea>
-    </div>
-    <div class="control-group">
-      <label for="phonenum">Phone Number (or other viable contact):</label><br /><input type="tel" name="phonenum" id="phonenum" value="" />
-    </div>
-    <div class="control-group">
-        <input type="submit" style="btn btn-primary btn-large" value="Submit" />  
-    </div>
-  </form>
-</div>
-</div>
+  </div>
 </div>
 
 {% endblock %}

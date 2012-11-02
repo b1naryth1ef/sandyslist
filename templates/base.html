@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="../static/css/bootstrap.css" rel="stylesheet">
-    <link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../static/css/style.css" rel="stylesheet">
+    {% if autoref %}
+      <meta http-equiv="refresh" content="5">
+    {% endif %}
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
     {% endblock %}
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -33,15 +35,29 @@
             <ul class="nav">
               <li><a href="/">Home</a></li>
               <li><a href="/find">Find</a></li>
-              <li><a href="/post">Post</a></li>
+              {% if ismod %}
+                <li><a href="/responses">Moderate</a></li>
+                <li><a href="/logout">Logout</a></li>
+              {% else %}
+                <li><a href="/post">Post</a></li>
+              {% endif %}
             </ul>
         </div>
       </div>
     </div>
 
     <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div id="alert_block">
+        {% for category, message in messages %}
+         <p class='alert alert-{{ category }}'>{{ message|safe }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+    {{ content|safe }}
     {% block content %}
-    {{ content }}
     {% endblock %}
     </div> <!-- /container -->
     <footer class="footer">
@@ -52,6 +68,17 @@
         <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
       </div>
     </footer>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-29805605-3']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
