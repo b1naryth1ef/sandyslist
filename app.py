@@ -6,7 +6,6 @@ import os
 app = Flask(__name__)
 app.secret_key = "asdfalsdkfg38asdfl38as8dfa8"
 
-
 def isMod():
     return session.get('loggedin', False)
 
@@ -15,12 +14,12 @@ def render(*args, **kwargs):
     return render_template(*args, **kwargs)
 
 #-- Static Routes --
-@app.route('/login/<pw>') #LOL SECURTUY IS GUD
+@app.route('/login/<pw>')
 def routeLogin(pw=None):
     if pw == os.getenv('SANDYLOGIN', 'test'):
         session['loggedin'] = True
         return redirect('/responses')
-    flash('Bad password!')
+    flash('Bad password!', 'error')
     return redirect('/')
 
 @app.route('/logout')
