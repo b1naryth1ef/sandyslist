@@ -67,10 +67,10 @@ def routeMod(id=None, action=None):
         q = Request.objects(id=id)
         if not len(q):
             flash("Invalid response ID!", 'error')
-            return redirect('/responses')
+            return redirect('/find')
         q[0].delete()
-        flash('Marked request as invalid!', 'success')
-        return redirect('/responses')
+        flash("Marked request %s as invalid!" % id, 'success')
+        return redirect('/find')
 
 @app.route('/help/<id>')
 def routeHelp(id):
@@ -99,7 +99,8 @@ def routeRespInfo(id):
     if not id:
         return redirect(url_for('/post'))
     p = FollowUp.objects(id=id)
-    if not len(p): return "No such response ID '%s'" % id
+    if not len(p): 
+        return "No such response ID '%s'" % id
     if not p[0].valid:
         return redirect(url_for('/resp/%s' % id))
     p = p[0]
@@ -114,7 +115,8 @@ def internals(route=None):
     if route == 'needhelp':
         for k, v in request.form.items():
             if not v: 
-                return 'You must give a value for %s! <a href="/post">Try again</a>' % k 
+                flash('You must give a value for %s! <a href="/post">Try again</a>' % k , 'error')
+                return redirect('/post')
         obj = Request(
             name=request.form.get('name'),
             urgent={'on':True, 'off':False, None:False}[request.form.get('urgent')],
@@ -122,13 +124,20 @@ def internals(route=None):
             contact=request.form.get('phonenum'),
             location=request.form.get('location'))
         obj.save()
-        return "Your request has been submitted to the system! We'll try to get to it ASAP. Request ID: %s" % obj.id 
+        flash("Your request has been submitted to the system! We'll try to get to it ASAP.<br />Request ID: %s" % obj.id, 'success')
+        return redirect('/post')
+
     elif route == "canhelp":
         for k, v in request.form.items():
             if not v: 
-                return 'You must give a value for %s! <a href="/help/%s">Try again</a>' % (k, request.form.get('id'))
+                flash('You must give a value for %s! <a href="/help/%s">Try again</a>' % (k, request.form.get('id')), 'error')
+                return redirect('/find')
+
         p = Request.objects(id=request.form.get('id'))
-        if not len(p): return 'Could not the request ID "%s"' % id
+        if not len(p): 
+            flash('Could not find the request ID "%s"' % id, 'error')
+            return redirect('/find')
+
         p = p[0]
         obj = FollowUp(
             name=request.form.get('name'),
@@ -137,9 +146,10 @@ def internals(route=None):
             entry=p)
         obj.save()
         p.responses.append(obj)
-        return """
-        Your response has been filed, please check back at <a href="/resp/%s">your response page</a> often. 
-        We'll update the page as soon as you can help!""" % (obj.id)
+        flash("""
+            Your response has been filed, please check back at <a href="/resp/%s">your response page</a> often. 
+            We'll update the page as soon as you can help!""" % (obj.id), 'success')
+        return redirect('/find')
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
