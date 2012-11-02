@@ -4,8 +4,10 @@ from mongoenginepagination import Document
 import os
 
 if os.getenv('USE_MLAB'):
+    print 'A'
     connect('heroku_app8846523', host=os.getenv('MONGOLAB_URI', 'mongodb://localhost:27017'))
 else:
+    print 'B'
     connect('sandy', host='hydr0.com') #Dev server
 
 class Request(Document):
